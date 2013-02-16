@@ -20,12 +20,12 @@ opts = OptionParser.new do |opts|
   opts.summary_width = 37
 
   opts.banner = 'Usage: lessc [options] [INPUT]'
-  
+
   opts.on('-h', '--help', 'print this help') do
     puts opts
     exit
   end
-  
+
   opts.on('-v', '--version', 'print version') do
     puts("lessc #{Less['version'].join('.')} (LESS Compiler) [Ruby] #{Less::VERSION}")
     exit(0)
@@ -47,6 +47,9 @@ opts = OptionParser.new do |opts|
     yuicompress = true
   end
 
+  opts.on('--line-numbers TYPE') do |type|
+    options[:dumpLineNumbers] = type
+  end
   opts.on('--no-color') do
     options[:color] = false
   end
@@ -61,23 +64,23 @@ opts = OptionParser.new do |opts|
     end
     options[:paths] = paths.compact
   end
-     
+
   # NOTE: not present in JS version, has: --00, --01 and --02
   opts.on('--optimization [0, 1 or 2]', "default: 1") do |num|
     options[:optimization] = (num || 1).to_i
   end
-  
+
   [0, 1, 2].each do |num| # --00 --01 --02
     opts.on("--0#{num}", "optimization: #{num}") do
       options[:optimization] = num
     end
   end
-  
+
   # NOTE: not present in JS version, does [INPUT] [OUTPUT]
   #opts.on('--output file', "specify an output path") do |path|
   #  output = File.expand_path(path)
   #end
-  
+
 end
 
 opts.parse! ARGV

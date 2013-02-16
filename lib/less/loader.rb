@@ -5,9 +5,9 @@ require 'uri'
 
 module Less
   class Loader
-    
+
     attr_reader :environment
-    
+
     def initialize
       context_wrapper = Less::JavaScript.context_wrapper.instance
       @context = context_wrapper.unwrap
@@ -22,13 +22,13 @@ module Less
       @environment.native('fs', Fs.new)
 
     end
-    
+
     def require(module_id)
       @environment.require(module_id)
     end
-    
+
     # stubbed JS modules required by less.js
-    
+
     class Path
       def join(*components)
         File.join(*components)
@@ -41,8 +41,12 @@ module Less
       def basename(path)
         File.basename(path)
       end
+
+      def resolve(path)
+        path
+      end
     end
-    
+
     class Sys
       def error(*errors)
         raise errors.join(' ')
@@ -88,7 +92,7 @@ module Less
         result
       end
     end
-    
+
     class Http
       def get(options, callback)
         err = nil
